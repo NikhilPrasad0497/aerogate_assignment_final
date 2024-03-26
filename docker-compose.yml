@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  aerogate:
+    build: ./aerogate
+    ports:
+      - "8080:8080"
+    environment:
+      ROUTE_LABEL: "prod-main"  
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - backend_network
+
+
+  backend_service_prod_main:
+    build: ./backend-service/prod-main
+    labels:
+      env: "prod-main"
+    ports:
+      - 80
+    deploy:
+      replicas: 2
+    networks:
+      - backend_network
+
+  backend_service_prod_canary:
+    build: ./backend-service/prod-canary
+    labels:
+      env: "prod-canary"
+    ports:
+      - 80
+    deploy:
+      replicas: 2
+    networks:
+      - backend_network
+
+networks:
+  backend_network:
+    driver: bridge
