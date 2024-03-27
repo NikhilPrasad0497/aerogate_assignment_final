@@ -6,7 +6,7 @@ import docker
 app = Flask(__name__)
 docker_client = docker.from_env()
 
-ROUTE_LABEL = os.getenv('ROUTE_LABEL', 'prod-main')  # Changed to 'prod-main'
+ROUTE_LABEL = os.getenv('ROUTE_LABEL', 'prod-main')
 
 
 @app.route('/cluster-info', methods=['GET'])
@@ -17,7 +17,7 @@ def routetomatchingcontainer():
             labels = container.labels
             if 'env' in labels and labels['env'] == ROUTE_LABEL:
                 port_mapping = container.attrs['NetworkSettings']['Ports']['80/tcp'][0]['HostPort']
-                return redirect(f"http://localhost:{port_mapping}/cluster-info")
+                return redirect(f"http://localhost:{port_mapping}/cluster-info/")
 
         return 'No matching service found'
     except docker.errors.APIError as e:
@@ -25,4 +25,4 @@ def routetomatchingcontainer():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=8080, debug=True)

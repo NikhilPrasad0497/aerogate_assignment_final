@@ -1,4 +1,4 @@
 FROM nginx:alpine
-
+EXPOSE 80
 COPY --chown=root:root --chmod=644 nginx.conf /etc/nginx/nginx.conf
-COPY --chown=root:root --chmod=644 custom-page-prod-main.html /usr/share/nginx/html/cluster-info/index.html
+COPY --chown=root:root --chmod=644 custom-page-prod-main.html /var/www/cluster-info/index.html
